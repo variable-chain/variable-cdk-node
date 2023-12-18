@@ -28,6 +28,13 @@ func (t *TokenAmountWithDecimals) UnmarshalText(data []byte) error {
 	return nil
 }
 
+type SetlementBackend string
+
+const (
+	Beethoven SetlementBackend = "beethoven"
+	L1        SetlementBackend = "l1"
+)
+
 // Config represents the configuration of the aggregator
 type Config struct {
 	// Host for the grpc server
@@ -85,4 +92,16 @@ type Config struct {
 	// gas offset: 100
 	// final gas: 1100
 	GasOffset uint64 `mapstructure:"GasOffset"`
+
+	// SetlementBackend indicates where ZKPs are settled. It can be "l1" or "beethoven"
+	SetlementBackend SetlementBackend `mapstructure:"SetlementBackend"`
+
+	// BeethovenTxTimeout is the interval time to wait for a tx to be mined from the beethoven
+	BeethovenTxTimeout types.Duration `mapstructure:"BeethovenTxTimeout"`
+
+	// BeethovenURL url of the beethoven service
+	BeethovenURL string `mapstructure:"BeethovenURL"`
+
+	// PrivateKey of the sequencer, used to authorize txs sent to the beethoven
+	SequencerPrivateKey types.KeystoreFileConfig `mapstructure:"SequencerPrivateKey"`
 }

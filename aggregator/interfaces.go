@@ -39,6 +39,8 @@ type ethTxManager interface {
 type etherman interface {
 	GetLatestVerifiedBatchNum() (uint64, error)
 	BuildTrustedVerifyBatchesTxData(lastVerifiedBatch, newVerifiedBatch uint64, inputs *ethmanTypes.FinalProofInputs) (to *common.Address, data []byte, err error)
+	GetSequencerAddr() (common.Address, error)
+	GetL1ContractAddress() common.Address
 }
 
 // aggregatorTxProfitabilityChecker interface for different profitability

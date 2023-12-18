@@ -49,6 +49,22 @@ func (_m *Etherman) BuildTrustedVerifyBatchesTxData(lastVerifiedBatch uint64, ne
 	return r0, r1, r2
 }
 
+// GetL1ContractAddress provides a mock function with given fields:
+func (_m *Etherman) GetL1ContractAddress() common.Address {
+	ret := _m.Called()
+
+	var r0 common.Address
+	if rf, ok := ret.Get(0).(func() common.Address); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(common.Address)
+		}
+	}
+
+	return r0
+}
+
 // GetLatestVerifiedBatchNum provides a mock function with given fields:
 func (_m *Etherman) GetLatestVerifiedBatchNum() (uint64, error) {
 	ret := _m.Called()
@@ -62,6 +78,32 @@ func (_m *Etherman) GetLatestVerifiedBatchNum() (uint64, error) {
 		r0 = rf()
 	} else {
 		r0 = ret.Get(0).(uint64)
+	}
+
+	if rf, ok := ret.Get(1).(func() error); ok {
+		r1 = rf()
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetSequencerAddr provides a mock function with given fields:
+func (_m *Etherman) GetSequencerAddr() (common.Address, error) {
+	ret := _m.Called()
+
+	var r0 common.Address
+	var r1 error
+	if rf, ok := ret.Get(0).(func() (common.Address, error)); ok {
+		return rf()
+	}
+	if rf, ok := ret.Get(0).(func() common.Address); ok {
+		r0 = rf()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(common.Address)
+		}
 	}
 
 	if rf, ok := ret.Get(1).(func() error); ok {
