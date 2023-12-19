@@ -28,11 +28,11 @@ func (t *TokenAmountWithDecimals) UnmarshalText(data []byte) error {
 	return nil
 }
 
-type SetlementBackend string
+type SettlementBackend string
 
 const (
-	Beethoven SetlementBackend = "beethoven"
-	L1        SetlementBackend = "l1"
+	Beethoven SettlementBackend = "beethoven"
+	L1        SettlementBackend = "l1"
 )
 
 // Config represents the configuration of the aggregator
@@ -93,8 +93,8 @@ type Config struct {
 	// final gas: 1100
 	GasOffset uint64 `mapstructure:"GasOffset"`
 
-	// SetlementBackend indicates where ZKPs are settled. It can be "l1" or "beethoven"
-	SetlementBackend SetlementBackend `mapstructure:"SetlementBackend"`
+	// SettlementBackend indicates where ZKPs are settled. It can be "l1" or "beethoven"
+	SettlementBackend SettlementBackend `mapstructure:"SettlementBackend"`
 
 	// BeethovenTxTimeout is the interval time to wait for a tx to be mined from the beethoven
 	BeethovenTxTimeout types.Duration `mapstructure:"BeethovenTxTimeout"`

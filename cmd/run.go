@@ -434,7 +434,7 @@ func createSequenceSender(cfg config.Config, pool *pool.Pool, etmStorage *ethtxm
 func runAggregator(ctx context.Context, c aggregator.Config, etherman *etherman.Client, ethTxManager *ethtxmanager.Client, st *state.State) {
 	var beethCli *beethovenClient.Client
 	var sequencerPrivateKey *ecdsa.PrivateKey
-	if c.SetlementBackend == aggregator.Beethoven {
+	if c.SettlementBackend == aggregator.Beethoven {
 		var err error
 		beethCli = beethovenClient.New(c.BeethovenURL)
 		_, sequencerPrivateKey, err = etherman.LoadAuthFromKeyStore(

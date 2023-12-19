@@ -91,7 +91,7 @@ func New(
 		profitabilityChecker = NewTxProfitabilityCheckerAcceptAll(stateInterface, cfg.IntervalAfterWhichBatchConsolidateAnyway.Duration)
 	}
 
-	if cfg.SetlementBackend == Beethoven {
+	if cfg.SettlementBackend == Beethoven {
 		if sequencerPrivateKey == nil {
 			return Aggregator{}, fmt.Errorf("the private key of the sequencer needs to be provided")
 		}
@@ -297,18 +297,19 @@ func (a *Aggregator) sendFinalProof() {
 
 			log.Infof("Final proof inputs: NewLocalExitRoot [%#x], NewStateRoot [%#x]", inputs.NewLocalExitRoot, inputs.NewStateRoot)
 
-			if a.cfg.SetlementBackend == L1 {
+			switch a.cfg.SettlementBackend {
+			case L1:
 				if success := a.settleProofToL1(ctx, proof, inputs); !success {
 					continue
 				}
-			} else if a.cfg.SetlementBackend == Beethoven {
+			case Beethoven:
 				if success := a.settleProofToBeethoven(ctx, proof, inputs); !success {
 					continue
 				}
-			} else {
-				log.Errorf("Invalid settlement backed for the ZKPs: %s", a.cfg.SetlementBackend)
-				a.endProofVerification()
-				continue
+			default:
+				if success := a.settleProofToL1(ctx, proof, inputs); !success {
+					continue
+				}
 			}
 
 			a.resetVerifyProofTime()
