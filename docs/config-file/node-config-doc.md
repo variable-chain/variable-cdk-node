@@ -2307,6 +2307,10 @@ MaxBatchesForL1=300
 | - [CleanupLockedProofsInterval](#Aggregator_CleanupLockedProofsInterval )                           | No      | string  | No         | -          | Duration                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | - [GeneratingProofCleanupThreshold](#Aggregator_GeneratingProofCleanupThreshold )                   | No      | string  | No         | -          | GeneratingProofCleanupThreshold represents the time interval after<br />which a proof in generating state is considered to be stuck and<br />allowed to be cleared.                                                                                                                                                                                                                                                           |
 | - [GasOffset](#Aggregator_GasOffset )                                                               | No      | integer | No         | -          | GasOffset is the amount of gas to be added to the gas estimation in order<br />to provide an amount that is higher than the estimated one. This is used<br />to avoid the TX getting reverted in case something has changed in the network<br />state after the estimation which can cause the TX to require more gas to be<br />executed.<br /><br />ex:<br />gas estimation: 1000<br />gas offset: 100<br />final gas: 1100 |
+| - [SettlementBackend](#Aggregator_SettlementBackend )                                               | No      | string  | No         | -          | SettlementBackend indicates where ZKPs are settled. It can be "l1" or "beethoven"                                                                                                                                                                                                                                                                                                                                             |
+| - [BeethovenTxTimeout](#Aggregator_BeethovenTxTimeout )                                             | No      | string  | No         | -          | Duration                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| - [BeethovenURL](#Aggregator_BeethovenURL )                                                         | No      | string  | No         | -          | BeethovenURL url of the beethoven service                                                                                                                                                                                                                                                                                                                                                                                     |
+| - [SequencerPrivateKey](#Aggregator_SequencerPrivateKey )                                           | No      | object  | No         | -          | SequencerPrivateKey of the sequencer, used to authorize txs sent to the beethoven                                                                                                                                                                                                                                                                                                                                             |
 
 ### <a name="Aggregator_Host"></a>12.1. `Aggregator.Host`
 
@@ -2568,6 +2572,98 @@ final gas: 1100
 ```
 [Aggregator]
 GasOffset=0
+```
+
+### <a name="Aggregator_SettlementBackend"></a>12.15. `Aggregator.SettlementBackend`
+
+**Type:** : `string`
+
+**Default:** `""`
+
+**Description:** SettlementBackend indicates where ZKPs are settled. It can be "l1" or "beethoven"
+
+**Example setting the default value** (""):
+```
+[Aggregator]
+SettlementBackend=""
+```
+
+### <a name="Aggregator_BeethovenTxTimeout"></a>12.16. `Aggregator.BeethovenTxTimeout`
+
+**Title:** Duration
+
+**Type:** : `string`
+
+**Default:** `"0s"`
+
+**Description:** BeethovenTxTimeout is the interval time to wait for a tx to be mined from the beethoven
+
+**Examples:** 
+
+```json
+"1m"
+```
+
+```json
+"300ms"
+```
+
+**Example setting the default value** ("0s"):
+```
+[Aggregator]
+BeethovenTxTimeout="0s"
+```
+
+### <a name="Aggregator_BeethovenURL"></a>12.17. `Aggregator.BeethovenURL`
+
+**Type:** : `string`
+
+**Default:** `""`
+
+**Description:** BeethovenURL url of the beethoven service
+
+**Example setting the default value** (""):
+```
+[Aggregator]
+BeethovenURL=""
+```
+
+### <a name="Aggregator_SequencerPrivateKey"></a>12.18. `[Aggregator.SequencerPrivateKey]`
+
+**Type:** : `object`
+**Description:** SequencerPrivateKey of the sequencer, used to authorize txs sent to the beethoven
+
+| Property                                                | Pattern | Type   | Deprecated | Definition | Title/Description                                      |
+| ------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ------------------------------------------------------ |
+| - [Path](#Aggregator_SequencerPrivateKey_Path )         | No      | string | No         | -          | Path is the file path for the key store file           |
+| - [Password](#Aggregator_SequencerPrivateKey_Password ) | No      | string | No         | -          | Password is the password to decrypt the key store file |
+
+#### <a name="Aggregator_SequencerPrivateKey_Path"></a>12.18.1. `Aggregator.SequencerPrivateKey.Path`
+
+**Type:** : `string`
+
+**Default:** `""`
+
+**Description:** Path is the file path for the key store file
+
+**Example setting the default value** (""):
+```
+[Aggregator.SequencerPrivateKey]
+Path=""
+```
+
+#### <a name="Aggregator_SequencerPrivateKey_Password"></a>12.18.2. `Aggregator.SequencerPrivateKey.Password`
+
+**Type:** : `string`
+
+**Default:** `""`
+
+**Description:** Password is the password to decrypt the key store file
+
+**Example setting the default value** (""):
+```
+[Aggregator.SequencerPrivateKey]
+Password=""
 ```
 
 ## <a name="NetworkConfig"></a>13. `[NetworkConfig]`
