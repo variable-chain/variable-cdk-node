@@ -102,6 +102,6 @@ type Config struct {
 	// BeethovenURL url of the beethoven service
 	BeethovenURL string `mapstructure:"BeethovenURL"`
 
-	// PrivateKey of the sequencer, used to authorize txs sent to the beethoven
+	// SequencerPrivateKey of the sequencer, used to authorize txs sent to the beethoven
 	SequencerPrivateKey types.KeystoreFileConfig `mapstructure:"SequencerPrivateKey"`
 }
