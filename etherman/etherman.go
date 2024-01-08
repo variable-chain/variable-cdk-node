@@ -1248,10 +1248,12 @@ func (etherMan *Client) generateRandomAuth() (bind.TransactOpts, error) {
 	return *auth, nil
 }
 
+// GetSequencerAddr return the address of the sequencer as registered on the L1 contract
 func (etherMan *Client) GetSequencerAddr() (common.Address, error) {
 	return etherMan.ZkEVM.TrustedSequencer(&bind.CallOpts{Pending: false})
 }
 
+// GetL1ContractAddress return the address of the zkEVM L1 smart contract
 func (etherMan *Client) GetL1ContractAddress() common.Address {
 	return etherMan.l1Cfg.ZkEVMAddr
 }

@@ -28,11 +28,14 @@ func (t *TokenAmountWithDecimals) UnmarshalText(data []byte) error {
 	return nil
 }
 
+// SettlementBackend different supported backends where ZKPs are sent
 type SettlementBackend string
 
 const (
+	// Beethoven specifies to send ZKPs to Beethoven service
 	Beethoven SettlementBackend = "beethoven"
-	L1        SettlementBackend = "l1"
+	// L1 specifies to send ZKPs to L1 chain
+	L1 SettlementBackend = "l1"
 )
 
 // Config represents the configuration of the aggregator
