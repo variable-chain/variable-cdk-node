@@ -3,7 +3,7 @@ module github.com/0xPolygonHermez/zkevm-node
 go 1.21
 
 require (
-	github.com/0xPolygon/beethoven v0.0.0-20231219171447-aec77becacf9
+	github.com/0xPolygon/agglayer daf7558ddf758d0b22609c2cda4860df2c0d8dfe
 	github.com/0xPolygon/cdk-data-availability v0.0.3
 	github.com/0xPolygonHermez/zkevm-data-streamer v0.1.14
 	github.com/didip/tollbooth/v6 v6.1.2

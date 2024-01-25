@@ -1,7 +1,7 @@
 # CONTAINER FOR BUILDING BINARY
 FROM golang:1.21 AS build
 
-# TODO: REMOVE SSH BEFORE MERGING, ONCE BEETHOVEN IS PUBLIC
+# TODO: REMOVE SSH BEFORE MERGING, ONCE AGGLAYER IS PUBLIC
 
 # SSH KEY
 ARG SSH_PRIVATE_KEY
@@ -10,7 +10,7 @@ RUN echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa
 RUN chmod 700 /root/.ssh/id_rsa
 RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
 RUN git config --global --add url."git@github.com:".insteadOf "https://github.com/"
-ENV GOPRIVATE=github.com/0xPolygon/beethoven
+ENV GOPRIVATE=github.com/0xPolygon/agglayer
 
 # INSTALL DEPENDENCIES
 RUN go install github.com/gobuffalo/packr/v2/packr2@v2.8.3
