@@ -14,9 +14,9 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/0xPolygon/beethoven/client"
-	beethovenTypes "github.com/0xPolygon/beethoven/rpc/types"
-	"github.com/0xPolygon/beethoven/tx"
+	"github.com/0xPolygon/agglayer/client"
+	agglayerTypes "github.com/0xPolygon/agglayer/rpc/types"
+	"github.com/0xPolygon/agglayer/tx"
 	"github.com/0xPolygonHermez/zkevm-node/aggregator/metrics"
 	"github.com/0xPolygonHermez/zkevm-node/aggregator/prover"
 	"github.com/0xPolygonHermez/zkevm-node/config/types"
@@ -71,7 +71,7 @@ type Aggregator struct {
 	exit context.CancelFunc
 
 	sequencerPrivateKey *ecdsa.PrivateKey
-	BeethovenClient     client.ClientInterface
+	agglayerClient      client.ClientInterface
 }
 
 // New creates a new aggregator.
@@ -80,7 +80,7 @@ func New(
 	stateInterface stateInterface,
 	ethTxManager ethTxManager,
 	etherman etherman,
-	beethovenClient client.ClientInterface,
+	agglayerClient client.ClientInterface,
 	sequencerPrivateKey *ecdsa.PrivateKey,
 ) (Aggregator, error) {
 	var profitabilityChecker aggregatorTxProfitabilityChecker
@@ -91,7 +91,7 @@ func New(
 		profitabilityChecker = NewTxProfitabilityCheckerAcceptAll(stateInterface, cfg.IntervalAfterWhichBatchConsolidateAnyway.Duration)
 	}
 
-	if cfg.SettlementBackend == Beethoven {
+	if cfg.SettlementBackend == agglayer {
 		if sequencerPrivateKey == nil {
 			return Aggregator{}, fmt.Errorf("the private key of the sequencer needs to be provided")
 		}
@@ -120,7 +120,7 @@ func New(
 		TimeCleanupLockedProofs: cfg.CleanupLockedProofsInterval,
 
 		finalProof:          make(chan finalProofMsg),
-		BeethovenClient:     beethovenClient,
+		agglayerClient:      agglayerClient,
 		sequencerPrivateKey: sequencerPrivateKey,
 	}
 
@@ -302,8 +302,8 @@ func (a *Aggregator) sendFinalProof() {
 				if success := a.settleProofToL1(ctx, proof, inputs); !success {
 					continue
 				}
-			case Beethoven:
-				if success := a.settleProofToBeethoven(ctx, proof, inputs); !success {
+			case agglayer:
+				if success := a.settleProofToagglayer(ctx, proof, inputs); !success {
 					continue
 				}
 			default:
@@ -1144,47 +1144,47 @@ func (a *Aggregator) settleProofToL1(ctx context.Context, proof *state.Proof, in
 	return true
 }
 
-func (a *Aggregator) settleProofToBeethoven(ctx context.Context, proof *state.Proof, inputs ethmanTypes.FinalProofInputs) (success bool) {
+func (a *Aggregator) settleProofToagglayer(ctx context.Context, proof *state.Proof, inputs ethmanTypes.FinalProofInputs) (success bool) {
 	l1Contract := a.Ethman.GetL1ContractAddress()
 	proofStrNo0x := strings.TrimPrefix(inputs.FinalProof.Proof, "0x")
 	proofBytes := common.Hex2Bytes(proofStrNo0x)
 	tx := tx.Tx{
 		L1Contract:        l1Contract,
-		LastVerifiedBatch: beethovenTypes.ArgUint64(proof.BatchNumber - 1),
-		NewVerifiedBatch:  beethovenTypes.ArgUint64(proof.BatchNumberFinal),
+		LastVerifiedBatch: agglayerTypes.ArgUint64(proof.BatchNumber - 1),
+		NewVerifiedBatch:  agglayerTypes.ArgUint64(proof.BatchNumberFinal),
 		ZKP: tx.ZKP{
 			NewStateRoot:     common.BytesToHash(inputs.NewStateRoot),
 			NewLocalExitRoot: common.BytesToHash(inputs.NewLocalExitRoot),
-			Proof:            beethovenTypes.ArgBytes(proofBytes),
+			Proof:            agglayerTypes.ArgBytes(proofBytes),
 		},
 	}
 	signedTx, err := tx.Sign(a.sequencerPrivateKey)
 	if err != nil {
 		log.Errorf("failed to sign tx: %v", err)
-		a.handleFailureToSendToBeethoven(ctx, proof)
+		a.handleFailureToSendToagglayer(ctx, proof)
 		return false
 	}
 	log.Debug("final proof signedTx: ", signedTx.Tx.ZKP.Proof.Hex())
-	txHash, err := a.BeethovenClient.SendTx(*signedTx)
+	txHash, err := a.agglayerClient.SendTx(*signedTx)
 	if err != nil {
 		log.Errorf("failed to send tx to the interop: %v", err)
-		a.handleFailureToSendToBeethoven(ctx, proof)
+		a.handleFailureToSendToagglayer(ctx, proof)
 		return false
 	}
-	log.Infof("tx %s sent to beethoven, waiting to be mined", txHash.Hex())
-	log.Debugf("Timeout set to %f seconds", a.cfg.BeethovenTxTimeout.Duration.Seconds())
-	waitCtx, cancelFunc := context.WithDeadline(ctx, time.Now().Add(a.cfg.BeethovenTxTimeout.Duration))
+	log.Infof("tx %s sent to agglayer, waiting to be mined", txHash.Hex())
+	log.Debugf("Timeout set to %f seconds", a.cfg.agglayerTxTimeout.Duration.Seconds())
+	waitCtx, cancelFunc := context.WithDeadline(ctx, time.Now().Add(a.cfg.agglayerTxTimeout.Duration))
 	defer cancelFunc()
-	if err := a.BeethovenClient.WaitTxToBeMined(txHash, waitCtx); err != nil {
+	if err := a.agglayerClient.WaitTxToBeMined(txHash, waitCtx); err != nil {
 		log.Errorf("interop didn't mine the tx: %v", err)
-		a.handleFailureToSendToBeethoven(ctx, proof)
+		a.handleFailureToSendToagglayer(ctx, proof)
 		return false
 	}
 	// TODO: wait for synchronizer to catch up
 	return true
 }
 
-func (a *Aggregator) handleFailureToSendToBeethoven(ctx context.Context, proof *state.Proof) {
+func (a *Aggregator) handleFailureToSendToagglayer(ctx context.Context, proof *state.Proof) {
 	log := log.WithFields("proofId", proof.ProofID, "batches", fmt.Sprintf("%d-%d", proof.BatchNumber, proof.BatchNumberFinal))
 	proof.GeneratingSince = nil
 	err := a.State.UpdateGeneratedProof(ctx, proof, nil)

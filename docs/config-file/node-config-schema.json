@@ -994,22 +994,22 @@
 				},
 				"SettlementBackend": {
 					"type": "string",
-					"description": "SettlementBackend indicates where ZKPs are settled. It can be \"l1\" or \"beethoven\"",
+					"description": "SettlementBackend indicates where ZKPs are settled. It can be \"l1\" or \"agglayer\"",
 					"default": ""
 				},
-				"BeethovenTxTimeout": {
+				"agglayerTxTimeout": {
 					"type": "string",
 					"title": "Duration",
-					"description": "BeethovenTxTimeout is the interval time to wait for a tx to be mined from the beethoven",
+					"description": "agglayerTxTimeout is the interval time to wait for a tx to be mined from the agglayer",
 					"default": "0s",
 					"examples": [
 						"1m",
 						"300ms"
 					]
 				},
-				"BeethovenURL": {
+				"agglayerURL": {
 					"type": "string",
-					"description": "BeethovenURL url of the beethoven service",
+					"description": "agglayerURL url of the agglayer service",
 					"default": ""
 				},
 				"SequencerPrivateKey": {
@@ -1027,7 +1027,7 @@
 					},
 					"additionalProperties": false,
 					"type": "object",
-					"description": "SequencerPrivateKey of the sequencer, used to authorize txs sent to the beethoven"
+					"description": "SequencerPrivateKey of the sequencer, used to authorize txs sent to the agglayer"
 				}
 			},
 			"additionalProperties": false,

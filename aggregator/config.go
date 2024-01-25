@@ -32,8 +32,8 @@ func (t *TokenAmountWithDecimals) UnmarshalText(data []byte) error {
 type SettlementBackend string
 
 const (
-	// Beethoven specifies to send ZKPs to Beethoven service
-	Beethoven SettlementBackend = "beethoven"
+	// agglayer specifies to send ZKPs to agglayer service
+	agglayer SettlementBackend = "agglayer"
 	// L1 specifies to send ZKPs to L1 chain
 	L1 SettlementBackend = "l1"
 )
@@ -96,15 +96,15 @@ type Config struct {
 	// final gas: 1100
 	GasOffset uint64 `mapstructure:"GasOffset"`
 
-	// SettlementBackend indicates where ZKPs are settled. It can be "l1" or "beethoven"
+	// SettlementBackend indicates where ZKPs are settled. It can be "l1" or "agglayer"
 	SettlementBackend SettlementBackend `mapstructure:"SettlementBackend"`
 
-	// BeethovenTxTimeout is the interval time to wait for a tx to be mined from the beethoven
-	BeethovenTxTimeout types.Duration `mapstructure:"BeethovenTxTimeout"`
+	// agglayerTxTimeout is the interval time to wait for a tx to be mined from the agglayer
+	agglayerTxTimeout types.Duration `mapstructure:"agglayerTxTimeout"`
 
-	// BeethovenURL url of the beethoven service
-	BeethovenURL string `mapstructure:"BeethovenURL"`
+	// agglayerURL url of the agglayer service
+	agglayerURL string `mapstructure:"agglayerURL"`
 
-	// SequencerPrivateKey of the sequencer, used to authorize txs sent to the beethoven
+	// SequencerPrivateKey of the sequencer, used to authorize txs sent to the agglayer
 	SequencerPrivateKey types.KeystoreFileConfig `mapstructure:"SequencerPrivateKey"`
 }

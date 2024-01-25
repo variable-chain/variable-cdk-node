@@ -2307,10 +2307,10 @@ MaxBatchesForL1=300
 | - [CleanupLockedProofsInterval](#Aggregator_CleanupLockedProofsInterval )                           | No      | string  | No         | -          | Duration                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | - [GeneratingProofCleanupThreshold](#Aggregator_GeneratingProofCleanupThreshold )                   | No      | string  | No         | -          | GeneratingProofCleanupThreshold represents the time interval after<br />which a proof in generating state is considered to be stuck and<br />allowed to be cleared.                                                                                                                                                                                                                                                           |
 | - [GasOffset](#Aggregator_GasOffset )                                                               | No      | integer | No         | -          | GasOffset is the amount of gas to be added to the gas estimation in order<br />to provide an amount that is higher than the estimated one. This is used<br />to avoid the TX getting reverted in case something has changed in the network<br />state after the estimation which can cause the TX to require more gas to be<br />executed.<br /><br />ex:<br />gas estimation: 1000<br />gas offset: 100<br />final gas: 1100 |
-| - [SettlementBackend](#Aggregator_SettlementBackend )                                               | No      | string  | No         | -          | SettlementBackend indicates where ZKPs are settled. It can be "l1" or "beethoven"                                                                                                                                                                                                                                                                                                                                             |
-| - [BeethovenTxTimeout](#Aggregator_BeethovenTxTimeout )                                             | No      | string  | No         | -          | Duration                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| - [BeethovenURL](#Aggregator_BeethovenURL )                                                         | No      | string  | No         | -          | BeethovenURL url of the beethoven service                                                                                                                                                                                                                                                                                                                                                                                     |
-| - [SequencerPrivateKey](#Aggregator_SequencerPrivateKey )                                           | No      | object  | No         | -          | SequencerPrivateKey of the sequencer, used to authorize txs sent to the beethoven                                                                                                                                                                                                                                                                                                                                             |
+| - [SettlementBackend](#Aggregator_SettlementBackend )                                               | No      | string  | No         | -          | SettlementBackend indicates where ZKPs are settled. It can be "l1" or "agglayer"                                                                                                                                                                                                                                                                                                                                             |
+| - [agglayerTxTimeout](#Aggregator_agglayerTxTimeout )                                             | No      | string  | No         | -          | Duration                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| - [agglayerURL](#Aggregator_agglayerURL )                                                         | No      | string  | No         | -          | agglayerURL url of the agglayer service                                                                                                                                                                                                                                                                                                                                                                                     |
+| - [SequencerPrivateKey](#Aggregator_SequencerPrivateKey )                                           | No      | object  | No         | -          | SequencerPrivateKey of the sequencer, used to authorize txs sent to the agglayer                                                                                                                                                                                                                                                                                                                                             |
 
 ### <a name="Aggregator_Host"></a>12.1. `Aggregator.Host`
 
@@ -2580,7 +2580,7 @@ GasOffset=0
 
 **Default:** `""`
 
-**Description:** SettlementBackend indicates where ZKPs are settled. It can be "l1" or "beethoven"
+**Description:** SettlementBackend indicates where ZKPs are settled. It can be "l1" or "agglayer"
 
 **Example setting the default value** (""):
 ```
@@ -2588,7 +2588,7 @@ GasOffset=0
 SettlementBackend=""
 ```
 
-### <a name="Aggregator_BeethovenTxTimeout"></a>12.16. `Aggregator.BeethovenTxTimeout`
+### <a name="Aggregator_agglayerTxTimeout"></a>12.16. `Aggregator.agglayerTxTimeout`
 
 **Title:** Duration
 
@@ -2596,7 +2596,7 @@ SettlementBackend=""
 
 **Default:** `"0s"`
 
-**Description:** BeethovenTxTimeout is the interval time to wait for a tx to be mined from the beethoven
+**Description:** agglayerTxTimeout is the interval time to wait for a tx to be mined from the agglayer
 
 **Examples:** 
 
@@ -2611,27 +2611,27 @@ SettlementBackend=""
 **Example setting the default value** ("0s"):
 ```
 [Aggregator]
-BeethovenTxTimeout="0s"
+agglayerTxTimeout="0s"
 ```
 
-### <a name="Aggregator_BeethovenURL"></a>12.17. `Aggregator.BeethovenURL`
+### <a name="Aggregator_agglayerURL"></a>12.17. `Aggregator.agglayerURL`
 
 **Type:** : `string`
 
 **Default:** `""`
 
-**Description:** BeethovenURL url of the beethoven service
+**Description:** agglayerURL url of the agglayer service
 
 **Example setting the default value** (""):
 ```
 [Aggregator]
-BeethovenURL=""
+agglayerURL=""
 ```
 
 ### <a name="Aggregator_SequencerPrivateKey"></a>12.18. `[Aggregator.SequencerPrivateKey]`
 
 **Type:** : `object`
-**Description:** SequencerPrivateKey of the sequencer, used to authorize txs sent to the beethoven
+**Description:** SequencerPrivateKey of the sequencer, used to authorize txs sent to the agglayer
 
 | Property                                                | Pattern | Type   | Deprecated | Definition | Title/Description                                      |
 | ------------------------------------------------------- | ------- | ------ | ---------- | ---------- | ------------------------------------------------------ |
