@@ -79,7 +79,7 @@ func TestGetBatchByL2BlockNumber(t *testing.T) {
 	receipts := []*types.Receipt{receipt}
 
 	// Create block to be able to calculate its hash
-	l2Block := types.NewBlock(header, transactions, []*types.Header{}, receipts, &trie.StackTrie{})
+	l2Block := types.NewBlock(header, transactions, []*types.Header{}, receipts, trie.NewStackTrie(nil))
 	receipt.BlockHash = l2Block.Hash()
 
 	err = pgStateStorage.AddL2Block(ctx, batchNumber, l2Block, receipts, state.MaxEffectivePercentage, dbTx)
