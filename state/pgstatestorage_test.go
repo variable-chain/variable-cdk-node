@@ -83,7 +83,7 @@ func TestGetBatchByL2BlockNumber(t *testing.T) {
 	receipts := []*types.Receipt{receipt}
 
 	// Create block to be able to calculate its hash
-	l2Block := types.NewBlock(header, transactions, []*types.Header{}, receipts, &trie.StackTrie{})
+	l2Block := types.NewBlock(header, transactions, []*types.Header{}, receipts, trie.NewStackTrie(nil))
 	receipt.BlockHash = l2Block.Hash()
 
 	storeTxsEGPData := []state.StoreTxEGPData{}
@@ -785,7 +785,7 @@ func TestGetLogs(t *testing.T) {
 			Time:       uint64(time.Unix()),
 		}
 
-		l2Block := types.NewBlock(header, transactions, []*types.Header{}, receipts, &trie.StackTrie{})
+		l2Block := types.NewBlock(header, transactions, []*types.Header{}, receipts, trie.NewStackTrie(nil))
 		for _, receipt := range receipts {
 			receipt.BlockHash = l2Block.Hash()
 		}
@@ -908,7 +908,7 @@ func TestGetNativeBlockHashesInRange(t *testing.T) {
 			Time:       uint64(time.Unix()),
 		}
 
-		l2Block := types.NewBlock(header, transactions, []*types.Header{}, receipts, &trie.StackTrie{})
+		l2Block := types.NewBlock(header, transactions, []*types.Header{}, receipts, trie.NewStackTrie(nil))
 		for _, receipt := range receipts {
 			receipt.BlockHash = l2Block.Hash()
 		}

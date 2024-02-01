@@ -174,7 +174,7 @@ func (s *State) SetGenesis(ctx context.Context, block Block, genesis Genesis, db
 	log.Info("Genesis root ", rootHex)
 
 	receipts := []*types.Receipt{}
-	l2Block := types.NewBlock(header, []*types.Transaction{}, []*types.Header{}, receipts, &trie.StackTrie{})
+	l2Block := types.NewBlock(header, []*types.Transaction{}, []*types.Header{}, receipts, trie.NewStackTrie(nil))
 	l2Block.ReceivedAt = block.ReceivedAt
 
 	storeTxsEGPData := []StoreTxEGPData{}

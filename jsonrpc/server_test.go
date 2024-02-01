@@ -233,7 +233,7 @@ func TestBatchRequests(t *testing.T) {
 		[]*ethTypes.Transaction{ethTypes.NewTransaction(1, common.Address{}, big.NewInt(1), 1, big.NewInt(1), []byte{})},
 		nil,
 		[]*ethTypes.Receipt{ethTypes.NewReceipt([]byte{}, false, uint64(0))},
-		&trie.StackTrie{},
+		trie.NewStackTrie(nil),
 	)
 
 	testCases := []testCase{
