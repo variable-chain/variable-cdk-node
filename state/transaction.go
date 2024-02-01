@@ -180,7 +180,8 @@ func (s *State) StoreTransactions(ctx context.Context, batchNumber uint64, proce
 		receipts := []*types.Receipt{receipt}
 
 		// Create block to be able to calculate its hash
-		block := types.NewBlock(header, transactions, []*types.Header{}, receipts, &trie.StackTrie{})
+		st := trie.NewStackTrie(nil)
+		block := types.NewBlock(header, transactions, []*types.Header{}, receipts, st)
 		block.ReceivedAt = processingContext.Timestamp
 
 		receipt.BlockHash = block.Hash()
@@ -930,7 +931,8 @@ func (s *State) StoreTransaction(ctx context.Context, batchNumber uint64, proces
 	receipts := []*types.Receipt{receipt}
 
 	// Create block to be able to calculate its hash
-	block := types.NewBlock(header, transactions, []*types.Header{}, receipts, &trie.StackTrie{})
+	st := trie.NewStackTrie(nil)
+	block := types.NewBlock(header, transactions, []*types.Header{}, receipts, st)
 	block.ReceivedAt = time.Unix(int64(timestamp), 0)
 
 	receipt.BlockHash = block.Hash()
