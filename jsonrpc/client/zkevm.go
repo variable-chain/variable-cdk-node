@@ -50,6 +50,9 @@ func (c *Client) BatchByNumber(ctx context.Context, number *big.Int) (*types.Bat
 	if err != nil {
 		return nil, err
 	}
+	if result == nil {
+		return nil, fmt.Errorf("unesxpected error, couldn't get batch from RPC, but it didn't return error. RPC response: %+v", response)
+	}
 
 	return result, nil
 }
