@@ -464,6 +464,32 @@ func TestGetBatchL2DataByNumber(t *testing.T) {
 	actualData, err := testState.GetBatchL2DataByNumber(ctx, batchNum, tx)
 	require.NoError(t, err)
 	assert.Equal(t, expectedData, actualData)
+
+	// Force backup
+	_, err = tx.Exec(ctx, "DELETE FROM state.batch")
+	require.NoError(t, err)
+
+	// Get batch 4 from backup
+	batchNum = 4
+	data, err = testState.GetBatchL2DataByNumber(ctx, batchNum, tx)
+	require.NoError(t, err)
+	assert.Nil(t, data)
+
+	// Get batch 5 from backup
+	batchNum = 5
+	actualData, err = testState.GetBatchL2DataByNumber(ctx, batchNum, tx)
+	require.NoError(t, err)
+	assert.Equal(t, expectedData, actualData)
+
+	// Update batch 5 and get it from backup
+	expectedData = []byte("new foo bar")
+	_, err = tx.Exec(ctx, openBatchSQL, batchNum, expectedData)
+	require.NoError(t, err)
+	_, err = tx.Exec(ctx, "DELETE FROM state.batch")
+	require.NoError(t, err)
+	actualData, err = testState.GetBatchL2DataByNumber(ctx, batchNum, tx)
+	require.NoError(t, err)
+	assert.Equal(t, expectedData, actualData)
 }
 func TestForkIDs(t *testing.T) {
 	initOrResetDB()
