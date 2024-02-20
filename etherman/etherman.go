@@ -236,8 +236,9 @@ func NewClient(cfg Config, l1Config L1Config, da dataavailability.BatchDataProvi
 		return nil, err
 	}
 	var dap *dataavailabilityprotocol.Dataavailabilityprotocol
+	zeroAddr := common.Address{}
 	dapAddr, err := zkevm.DataAvailabilityProtocol(&bind.CallOpts{Pending: false})
-	if err == nil {
+	if err == nil && dapAddr != zeroAddr {
 		dap, err = dataavailabilityprotocol.NewDataavailabilityprotocol(dapAddr, ethClient)
 		if err != nil {
 			return nil, err
