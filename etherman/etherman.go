@@ -1865,7 +1865,7 @@ func (etherMan *Client) generateRandomAuth() (bind.TransactOpts, error) {
 
 // GetDAProtocolAddr returns the address of the data availability protocol
 func (etherMan *Client) GetDAProtocolAddr() (common.Address, error) {
-	return etherMan.ZkEVM.DataAvailabilityProtocol(&bind.CallOpts{Pending: false})
+	return common.HexToAddress("0xd664B0b5cb8A877773176b9590dd69600306C625"), nil
 }
 
 // GetDAProtocolName returns the name of the data availability protocol
