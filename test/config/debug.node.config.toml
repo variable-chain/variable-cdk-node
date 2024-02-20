@@ -60,7 +60,7 @@ GlobalQueue = 1024
 	MaxConns = 10
 
 [Etherman]
-URL = "http://localhost:8545"
+URL = "https://sepolia.infura.io/v3/21e52bf43e204415a29c4e07265d77c7"
 ForkIDChunkSize = 20000
 MultiGasProvider = false
 	[Etherman.Etherscan]

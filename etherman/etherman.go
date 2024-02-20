@@ -235,13 +235,15 @@ func NewClient(cfg Config, l1Config L1Config, da dataavailability.BatchDataProvi
 		log.Errorf("error creating NewPol client (%s). Error: %w", l1Config.PolAddr.String(), err)
 		return nil, err
 	}
+	var dap *dataavailabilityprotocol.Dataavailabilityprotocol
 	dapAddr, err := zkevm.DataAvailabilityProtocol(&bind.CallOpts{Pending: false})
 	if err != nil {
 		return nil, err
-	}
-	dap, err := dataavailabilityprotocol.NewDataavailabilityprotocol(dapAddr, ethClient)
-	if err != nil {
-		return nil, err
+	} else {
+		dap, err = dataavailabilityprotocol.NewDataavailabilityprotocol(dapAddr, ethClient)
+		if err != nil {
+			return nil, err
+		}
 	}
 	var scAddresses []common.Address
 	scAddresses = append(scAddresses, l1Config.ZkEVMAddr, l1Config.RollupManagerAddr, l1Config.GlobalExitRootManagerAddr)
