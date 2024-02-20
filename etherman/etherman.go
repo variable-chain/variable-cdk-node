@@ -236,13 +236,10 @@ func NewClient(cfg Config, l1Config L1Config, da dataavailability.BatchDataProvi
 		return nil, err
 	}
 	var dap *dataavailabilityprotocol.Dataavailabilityprotocol
-	zeroAddr := common.Address{}
-	dapAddr, err := zkevm.DataAvailabilityProtocol(&bind.CallOpts{Pending: false})
-	if err == nil && dapAddr != zeroAddr {
-		dap, err = dataavailabilityprotocol.NewDataavailabilityprotocol(dapAddr, ethClient)
-		if err != nil {
-			return nil, err
-		}
+	dapAddr := common.HexToAddress("0xd664B0b5cb8A877773176b9590dd69600306C625")
+	dap, err = dataavailabilityprotocol.NewDataavailabilityprotocol(dapAddr, ethClient)
+	if err != nil {
+		return nil, err
 	}
 	var scAddresses []common.Address
 	scAddresses = append(scAddresses, l1Config.ZkEVMAddr, l1Config.RollupManagerAddr, l1Config.GlobalExitRootManagerAddr)
