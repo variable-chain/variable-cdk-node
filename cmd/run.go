@@ -718,6 +718,15 @@ func forkIDIntervals(ctx context.Context, st *state.State, etherman *etherman.Cl
 			log.Info("Getting forkIDs intervals. Please wait...")
 			// Read Fork ID FROM POE SC
 			forkIntervals, err := etherman.GetForks(ctx, genesisBlockNumber, lastBlock.BlockNumber)
+			for i := 0; len(forkIntervals) == 0; i++ {
+				log.Debug("No forkID received. Trying again...")
+				forkIntervals, err = etherman.GetForks(ctx, genesisBlockNumber, genesisBlockNumber)
+				time.Sleep(1 * time.Second)
+				if i == 30 {
+					return []state.ForkIDInterval{}, fmt.Errorf("error getting forkID. Error: %v", err)
+				}
+			}
+
 			if err != nil {
 				return []state.ForkIDInterval{}, fmt.Errorf("error getting forks. Please check the configuration. Error: %v", err)
 			} else if len(forkIntervals) == 0 {
@@ -756,10 +765,6 @@ func forkIDIntervals(ctx context.Context, st *state.State, etherman *etherman.Cl
 		} else {
 			log.Debug("Getting initial forkID")
 			forkIntervals, err := etherman.GetForks(ctx, genesisBlockNumber, genesisBlockNumber)
-			for len(forkIntervals) == 0 {
-				log.Debug("No forkID received. Trying again...")
-				forkIntervals, err = etherman.GetForks(ctx, genesisBlockNumber, genesisBlockNumber)
-			}
 
 			if err != nil {
 				return []state.ForkIDInterval{}, fmt.Errorf("error getting forks. Please check the configuration. Error: %v", err)
