@@ -80,7 +80,7 @@ EnableL2SuggestedGasPricePolling = true
 
 [Synchronizer]
 SyncInterval = "5s"
-SyncChunkSize = 100
+SyncChunkSize = 9999
 TrustedSequencerURL = ""
 
 [Sequencer]
