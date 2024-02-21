@@ -756,6 +756,11 @@ func forkIDIntervals(ctx context.Context, st *state.State, etherman *etherman.Cl
 		} else {
 			log.Debug("Getting initial forkID")
 			forkIntervals, err := etherman.GetForks(ctx, genesisBlockNumber, genesisBlockNumber)
+			for len(forkIntervals) == 0 {
+				log.Debug("No forkID received. Trying again...")
+				forkIntervals, err = etherman.GetForks(ctx, genesisBlockNumber, genesisBlockNumber)
+			}
+
 			if err != nil {
 				return []state.ForkIDInterval{}, fmt.Errorf("error getting forks. Please check the configuration. Error: %v", err)
 			} else if len(forkIntervals) == 0 {
