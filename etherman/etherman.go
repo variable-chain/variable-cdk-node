@@ -235,14 +235,14 @@ func NewClient(cfg Config, l1Config L1Config, da dataavailability.BatchDataProvi
 		log.Errorf("error creating NewPol client (%s). Error: %w", l1Config.PolAddr.String(), err)
 		return nil, err
 	}
-	dapAddr, err := zkevm.DataAvailabilityProtocol(&bind.CallOpts{Pending: false})
-	if err != nil {
-		return nil, err
-	}
-	dap, err := dataavailabilityprotocol.NewDataavailabilityprotocol(dapAddr, ethClient)
-	if err != nil {
-		return nil, err
-	}
+	// dapAddr, err := zkevm.DataAvailabilityProtocol(&bind.CallOpts{Pending: false})
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// dap, err := dataavailabilityprotocol.NewDataavailabilityprotocol(dapAddr, ethClient)
+	// if err != nil {
+	// 	return nil, err
+	// }
 	var scAddresses []common.Address
 	scAddresses = append(scAddresses, l1Config.ZkEVMAddr, l1Config.RollupManagerAddr, l1Config.GlobalExitRootManagerAddr)
 
@@ -266,13 +266,13 @@ func NewClient(cfg Config, l1Config L1Config, da dataavailability.BatchDataProvi
 	log.Debug("rollupID: ", rollupID)
 
 	return &Client{
-		EthClient:                ethClient,
-		ZkEVM:                    zkevm,
-		OldZkEVM:                 oldZkevm,
-		RollupManager:            rollupManager,
-		Pol:                      pol,
-		GlobalExitRootManager:    globalExitRoot,
-		DAProtocol:               dap,
+		EthClient:             ethClient,
+		ZkEVM:                 zkevm,
+		OldZkEVM:              oldZkevm,
+		RollupManager:         rollupManager,
+		Pol:                   pol,
+		GlobalExitRootManager: globalExitRoot,
+		// DAProtocol:               dap,
 		OldGlobalExitRootManager: oldGlobalExitRoot,
 		SCAddresses:              scAddresses,
 		RollupID:                 rollupID,
@@ -1872,12 +1872,14 @@ func (etherMan *Client) generateRandomAuth() (bind.TransactOpts, error) {
 
 // GetDAProtocolAddr returns the address of the data availability protocol
 func (etherMan *Client) GetDAProtocolAddr() (common.Address, error) {
-	return etherMan.ZkEVM.DataAvailabilityProtocol(&bind.CallOpts{Pending: false})
+	return common.Address{}, nil
+	// return etherMan.ZkEVM.DataAvailabilityProtocol(&bind.CallOpts{Pending: false})
 }
 
 // GetDAProtocolName returns the name of the data availability protocol
 func (etherMan *Client) GetDAProtocolName() (string, error) {
-	return etherMan.DAProtocol.GetProcotolName(&bind.CallOpts{Pending: false})
+	return "DataAvailabilityCommittee", nil
+	// return etherMan.DAProtocol.GetProcotolName(&bind.CallOpts{Pending: false})
 }
 
 // SetDataAvailabilityProtocol sets the address for the new data availability protocol

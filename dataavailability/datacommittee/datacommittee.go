@@ -4,7 +4,6 @@ import (
 	"crypto/ecdsa"
 	"errors"
 	"fmt"
-	"math/big"
 	"math/rand"
 	"sort"
 	"strings"
@@ -13,7 +12,6 @@ import (
 	daTypes "github.com/0xPolygon/cdk-data-availability/types"
 	"github.com/0xPolygonHermez/zkevm-node/etherman/smartcontracts/polygondatacommittee"
 	"github.com/0xPolygonHermez/zkevm-node/log"
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -254,42 +252,43 @@ func (s signatureMsgs) Swap(i, j int) { s[i], s[j] = s[j], s[i] }
 
 // getCurrentDataCommittee return the currently registered data committee
 func (d *DataCommitteeBackend) getCurrentDataCommittee() (*DataCommittee, error) {
-	addrsHash, err := d.dataCommitteeContract.CommitteeHash(&bind.CallOpts{Pending: false})
-	if err != nil {
-		return nil, fmt.Errorf("error getting CommitteeHash from L1 SC: %w", err)
-	}
-	reqSign, err := d.dataCommitteeContract.RequiredAmountOfSignatures(&bind.CallOpts{Pending: false})
-	if err != nil {
-		return nil, fmt.Errorf("error getting RequiredAmountOfSignatures from L1 SC: %w", err)
-	}
-	members, err := d.getCurrentDataCommitteeMembers()
-	if err != nil {
-		return nil, err
-	}
+	return &DataCommittee{}, nil
+	// addrsHash, err := d.dataCommitteeContract.CommitteeHash(&bind.CallOpts{Pending: false})
+	// if err != nil {
+	// 	return nil, fmt.Errorf("error getting CommitteeHash from L1 SC: %w", err)
+	// }
+	// reqSign, err := d.dataCommitteeContract.RequiredAmountOfSignatures(&bind.CallOpts{Pending: false})
+	// if err != nil {
+	// 	return nil, fmt.Errorf("error getting RequiredAmountOfSignatures from L1 SC: %w", err)
+	// }
+	// members, err := d.getCurrentDataCommitteeMembers()
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	return &DataCommittee{
-		AddressesHash:      common.Hash(addrsHash),
-		RequiredSignatures: reqSign.Uint64(),
-		Members:            members,
-	}, nil
+	// return &DataCommittee{
+	// 	AddressesHash:      common.Hash(addrsHash),
+	// 	RequiredSignatures: reqSign.Uint64(),
+	// 	Members:            members,
+	// }, nil
 }
 
 // getCurrentDataCommitteeMembers return the currently registered data committee members
-func (d *DataCommitteeBackend) getCurrentDataCommitteeMembers() ([]DataCommitteeMember, error) {
-	nMembers, err := d.dataCommitteeContract.GetAmountOfMembers(&bind.CallOpts{Pending: false})
-	if err != nil {
-		return nil, fmt.Errorf("error getting GetAmountOfMembers from L1 SC: %w", err)
-	}
-	members := make([]DataCommitteeMember, 0, nMembers.Int64())
-	for i := int64(0); i < nMembers.Int64(); i++ {
-		member, err := d.dataCommitteeContract.Members(&bind.CallOpts{Pending: false}, big.NewInt(i))
-		if err != nil {
-			return nil, fmt.Errorf("error getting Members %d from L1 SC: %w", i, err)
-		}
-		members = append(members, DataCommitteeMember{
-			Addr: member.Addr,
-			URL:  member.Url,
-		})
-	}
-	return members, nil
-}
+// func (d *DataCommitteeBackend) getCurrentDataCommitteeMembers() ([]DataCommitteeMember, error) {
+// 	nMembers, err := d.dataCommitteeContract.GetAmountOfMembers(&bind.CallOpts{Pending: false})
+// 	if err != nil {
+// 		return nil, fmt.Errorf("error getting GetAmountOfMembers from L1 SC: %w", err)
+// 	}
+// 	members := make([]DataCommitteeMember, 0, nMembers.Int64())
+// 	for i := int64(0); i < nMembers.Int64(); i++ {
+// 		member, err := d.dataCommitteeContract.Members(&bind.CallOpts{Pending: false}, big.NewInt(i))
+// 		if err != nil {
+// 			return nil, fmt.Errorf("error getting Members %d from L1 SC: %w", i, err)
+// 		}
+// 		members = append(members, DataCommitteeMember{
+// 			Addr: member.Addr,
+// 			URL:  member.Url,
+// 		})
+// 	}
+// 	return members, nil
+// }
