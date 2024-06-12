@@ -1,0 +1,20 @@
+version: "3.5"
+
+networks:
+  default:
+    name: cdk-data-availabilityDB
+
+services:
+  zkevm-approve:
+    container_name: zkevm-approve
+    image: hermeznetwork/cdk-validium-node:v0.0.3-RC2
+    environment:
+      - ZKEVM_NODE_STATE_DB_HOST=zkevm-state-db
+    volumes:
+      - ../sequencer.keystore:/pk/keystore
+      - ../configReal.toml:/app/config.toml
+      - ../genesisReal.json:/app/genesis.json
+    command:
+      - "/bin/sh"
+      - "-c"
+      - "/app/zkevm-node approve --network custom --custom-network-file /app/genesis.json --key-store-path /pk/keystore --pw testonly --am 115792089237316195423570985008687907853269984665640564039457584007913129639935 -y --cfg /app/config.toml"

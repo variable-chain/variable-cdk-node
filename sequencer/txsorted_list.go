@@ -111,17 +111,23 @@ func (e *txSortedList) Print() {
 	}
 }
 
-// addSort adds the tx to the txSortedList in a sorted way
+// addSort adds the tx to the txSortedList in a first come first serve manner
 func (e *txSortedList) addSort(tx *TxTracker) {
-	i := sort.Search(len(e.sorted), func(i int) bool {
-		return e.isGreaterThan(tx, e.list[e.sorted[i].HashStr])
-	})
-
-	e.sorted = append(e.sorted, nil)
-	copy(e.sorted[i+1:], e.sorted[i:])
-	e.sorted[i] = tx
-	log.Infof("Added tx(%s) to txSortedList. With gasPrice(%d) at index(%d) from total(%d)", tx.HashStr, tx.GasPrice, i, len(e.sorted))
+	e.sorted = append(e.sorted, tx)
+	log.Infof("Added tx(%s) to txSortedList. With gasPrice(%d) at index(%d) from total(%d)", tx.HashStr, tx.GasPrice, len(e.sorted)-1, len(e.sorted))
 }
+
+// addSort adds the tx to the txSortedList in a sorted way
+// func (e *txSortedList) addSort(tx *TxTracker) {
+// 	i := sort.Search(len(e.sorted), func(i int) bool {
+// 		return e.isGreaterThan(tx, e.list[e.sorted[i].HashStr])
+// 	})
+
+// 	e.sorted = append(e.sorted, nil)
+// 	copy(e.sorted[i+1:], e.sorted[i:])
+// 	e.sorted[i] = tx
+// 	log.Infof("Added tx(%s) to txSortedList. With gasPrice(%d) at index(%d) from total(%d)", tx.HashStr, tx.GasPrice, i, len(e.sorted))
+// }
 
 // isGreaterThan returns true if the tx1 has greater gasPrice than tx2
 func (e *txSortedList) isGreaterThan(tx1 *TxTracker, tx2 *TxTracker) bool {
